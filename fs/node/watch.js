@@ -2,6 +2,7 @@
 
 var fs = require('fs')
 var path = require('path')
+var images = require('images')
 
 var resolve = (p = '') => path.join(__dirname, './watch' + p)
 
@@ -10,23 +11,9 @@ function sprite () {
     if (!fs.existsSync(resolve('/dist'))) {
       fs.mkdirSync(resolve('/dist'))
     }
-    // fs.writeFileSync(resolve('/dist/sprite.png'), '')
-    append(files, 0, '')
+
   })
 }
 
-function append (list, i, data) {
-  if (i >= list.length) {
-    console.log(data)
-    fs.writeFile(resolve('/dist/sprite.png'), data, (err) => {
-      console.log(err)
-    })
-    return
-  }
-  fs.readFile(resolve('/assets/' + list[i]), (err, f) => {
-    data += f
-    append(list, ++i, data)
-  })
-}
 
 sprite()

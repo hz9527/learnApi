@@ -6,6 +6,23 @@ var images = require('images')
 
 var resolve = (p = '') => path.join(__dirname, './watch' + p)
 
+var html =
+`
+<!DOCTYPE html5>
+<html>
+  <head>
+    <title>sprite</title>
+    <style>
+      .icon {display: inline-block;}
+    </style>
+    <link rel="stylesheet" href="./sprite.css"/>
+  </head>
+  <body>
+    //content
+  </body>
+</html>
+`
+
 function sprite (input, output, padding) {
   fs.readdir(resolve('/' + input), (err, files) => {
     if (!fs.existsSync(resolve('/' + output))) {
@@ -18,6 +35,8 @@ function sprite (input, output, padding) {
     let spr = null
     let i = 0
     let css = ''
+    let fragment = ''
+    files = files.filter(item => /\.(png|jpe?g)$/.test(item))
     files.forEach(name => {
       let img = images(resolve('/' + input + '/' + name))
       let w = img.width()
@@ -33,18 +52,26 @@ function sprite (input, output, padding) {
     spr = images(tw, th)
     while (i < list.length) {
       spr.draw(images(resolve('/' + input + '/' + files[i])), 0, cur)
-      css += `.icon-${files[i].replace('.png', '')} {
+      let n = files[i].split('.')
+      n = n[0]
+      css += `.icon-${n} {
         width: ${list[i].width}px;
         height: ${list[i].height}px;
         background-image: url('./sprite.png');
         background-position: 0 -${cur}px;
       }
       `
+      fragment += `<div class="icon icon-${n}"></div>`
       cur += list[i].height + padding
       i++
     }
     spr.save(resolve('/' + output + '/sprite.png'))
     fs.writeFile(resolve('/' + output + '/sprite.css'), css, err => {
+      if (err) {
+        console.log(err)
+      }
+    })
+    fs.writeFile(resolve('/' + output + '/test.html'), html.replace('//content', fragment), err => {
       if (err) {
         console.log(err)
       }

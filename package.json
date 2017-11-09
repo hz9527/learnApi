@@ -1,6 +1,8 @@
 {
   "devDependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "images": "^3.0.1"
+    "images": "^3.0.1",
+    "opn": "^5.1.0"
   }
 }

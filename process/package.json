@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "arg": "node arg.js",
+    "args": "node arg.js prod -set key=value"
+  }
+}

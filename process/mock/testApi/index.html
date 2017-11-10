@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>test api</title>
+  </head>
+  <body>
+    <div id='content'></div>
+    <script type="text/javascript">
+      function $ (id) {
+        return document.getElementById(id)
+      }
+      function $http (method, url, type, data) {
+        return new Promise((resolve, reject) => {
+          var ajx = getAjx()
+          ajx.open(method, url)
+          if (type) {
+            ajx.setRequestHeader('Content-Type', type)
+            if (type === 'application/json') {
+              data = JSON.stringify(data)
+            }
+          }
+          ajx.send(data || null)
+          ajx.onreadystatechange = function () {
+            if (ajx.readyState === 4) {
+              if (ajx.status === 200 || (ajx.status >= 300 && ajx.status <= 304)) {
+                resolve(JSON.parse(ajx.responseText))
+              } else {
+                reject( ajx.readyState)
+              }
+            }
+          }
+        })
+      }
+      function getAjx () {
+        if (window.XMLHttpRequest) {
+          return new XMLHttpRequest()
+        }
+      }
+      function getList () {
+        $http('get', '/testApi')
+          .then(res => {
+            var list = res // [{method, path}]
+            list.forEach(item => {
+              var methods = typeof item.method === 'string' ? [item.method] : item.method
+              methods.forEach(m => {
+                var c = document.createElement('div')
+                c.id = m + item.path
+                $http(m, item.path)
+                  .then(res => {
+                    c.innerHTML = JSON.stringify(res.data)
+                    $('content').appendChild(c)
+                  }).catch(err => {
+                    console.log(err)
+                  })
+              })
+            })
+          }).catch(err => {
+            console.log(err)
+          })
+      }
+      getList()
+    </script>
+  </body>
+</html>

@@ -12,7 +12,7 @@ module.exports = [
     method: ['post', 'put'],
     path: '/setList',
     handler: (req) => {
-      console.log(req)
+      // console.log(req)
       return {
         code: 0,
         codeMsg: 'success',

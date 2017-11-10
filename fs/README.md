@@ -7,7 +7,8 @@ node文件夹内为纯node项目，实现
 5. watch文件夹内图片，并生成雪碧图
 
 serve及borwser完成
-1. 一个图片上传，重命名并存储在static目录下并返回一个图片url
+1. 一个图片上传，重命名并存储在static目录下并返回一个图片url，base64
 2. 实现一个jsonp接口
+3. 用form形式上传文件
 
 ## 使用
